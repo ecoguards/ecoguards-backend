@@ -1,18 +1,18 @@
 const express = require("express");
-//const bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 //const { useTreblle } = require("treblle");
 const mongoose = require("mongoose");
 require("dotenv").config();
-const userRoutes = require("./routes/userRoutes");
-//const cookieParser = require('cookie-parser');
+const userRoute = require("./routes/userRoute");
+const cookieParser = require('cookie-parser');
 //const projectRoutes = require("./routes/projectRoutes");
 
 const app = express();
 
 //middleware
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(express.json({ extended: false }));
-// app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json({ extended: false }));
+app.use(cookieParser());
 
 //Database
 const dbURI = process.env.MONGO_URI;
@@ -33,12 +33,12 @@ mongoose.connect(dbURI, {
 app.get("/api/healthchecker", (req, res) => {
   res.status(200).json({
     status: "success",
-    message: "Welcome to NatureDefender",
+    message: "Welcome to Ecoguard API",
   });
 });
 
 //userRoute router
-app.use("/users", userRoutes);
+app.use("/users", userRoute);
 // app.use("/projects", projectRoutes);
 
 const port = process.env.PORT || 3000;
