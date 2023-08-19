@@ -3,7 +3,7 @@ const express = require("express");
 //const { useTreblle } = require("treblle");
 const mongoose = require("mongoose");
 require("dotenv").config();
-//const userRoutes = require("./routes/userRoutes");
+const userRoutes = require("./routes/userRoutes");
 //const cookieParser = require('cookie-parser');
 //const projectRoutes = require("./routes/projectRoutes");
 
@@ -38,7 +38,7 @@ app.get("/api/healthchecker", (req, res) => {
 });
 
 //userRoute router
-// app.use("/users", userRoutes);
+app.use("/users", userRoutes);
 // app.use("/projects", projectRoutes);
 
 const port = process.env.PORT || 3000;
