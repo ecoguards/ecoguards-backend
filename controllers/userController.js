@@ -1,6 +1,7 @@
 const { User } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { handleErrors } = require("../errors/handleErrors");
 
 module.exports.register_post = async (req, res) => {
   try {
@@ -33,10 +34,8 @@ module.exports.register_post = async (req, res) => {
       data: user,
     });
   } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
+    const errors = handleErrors(err)
+    res.status(400).json({errors})
   }
 };
 
@@ -51,7 +50,7 @@ module.exports.login = async (req, res) => {
       });
     }
     //if user found compare password
-    const validPassword = await bcrypt.compare(
+    const validPassword =  await bcrypt.compare(
       req.body.password,
       user.password
     );
@@ -68,10 +67,10 @@ module.exports.login = async (req, res) => {
       expiresIn: "7days",
     });
     //verify token
+
     const verified = jwt.verify(token, process.env.MY_SECRET);
     //send token to client
     res.cookie("jwt", token, {
-      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
     res.status(200).json({
@@ -80,11 +79,15 @@ module.exports.login = async (req, res) => {
       data: verified,
     });
   } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
+    const errors = handleErrors(err)
+    res.status(400).json({errors})
   }
 };
 
-module.exports.login_get = (req, res) => {};
+module.exports.logout = (req, res) => {
+  res.cookie("jwt", "", { maxAge: 1 });
+  res.status(200).json({
+    status: "success",
+    message: "user logged out successfully",
+  });
+};

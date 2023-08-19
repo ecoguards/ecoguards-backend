@@ -1,9 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-//const { useTreblle } = require("treblle");
+const { useTreblle } = require("treblle");
 const mongoose = require("mongoose");
 require("dotenv").config();
-const userRoute = require("./routes/userRoute");
+const router = require("./routes/userRoute");
 const cookieParser = require('cookie-parser');
 //const projectRoutes = require("./routes/projectRoutes");
 
@@ -24,10 +24,10 @@ mongoose.connect(dbURI, {
   .catch((err) => console.log(err));
 
 //use treblle middleware
-// useTreblle(app, {
-//   apiKey: process.env.TREBLLE_API_KEY,
-//   projectId: process.env.PRODUCT_API_KEY,
-// });
+useTreblle(app, {
+  apiKey: process.env.TREBLLE_API_KEY,
+  projectId: process.env.PRODUCT_API_KEY,
+});
 
 //   Api Health Checker
 app.get("/api/healthchecker", (req, res) => {
@@ -38,7 +38,7 @@ app.get("/api/healthchecker", (req, res) => {
 });
 
 //userRoute router
-app.use("/users", userRoute);
+app.use("/users", router);
 // app.use("/projects", projectRoutes);
 
 const port = process.env.PORT || 3000;
