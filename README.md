@@ -4,7 +4,7 @@ Welcome to the NatureDefenders API documentation. This guide provides details ab
 
 ## Base URL
 
-The base URL for all endpoints is: `https://nature-defenders.onrender.com/`
+The base URL for all endpoints is: `https://localhost:3000`
 
 ## User Registration
 
@@ -32,7 +32,35 @@ The base URL for all endpoints is: `https://nature-defenders.onrender.com/`
     "fullName": "John Doe",
     "email": "john@example.com",
     "countryOfResidence": "USA",
-    "role": "admin",
+    
   }
   ```
+## User Registration
 
+### `POST /users/login`
+
+**Request Body:**
+
+```json
+{
+  
+  "email": "john@example.com",
+  "password": "securepassword",
+  
+}
+```
+
+**Response:**
+
+- Status: 201 Created
+- Body:
+ 
+  ```json
+  {
+    "_id": "user-id",
+    "fullName": "John Doe",
+    "email": "john@example.com",
+    "countryOfResidence": "USA",
+    
+  }
+  ```
