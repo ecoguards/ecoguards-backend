@@ -2,6 +2,9 @@ const { User } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { handleErrors } = require("../errors/handleErrors");
+const { Otp } = require("../models/otpVerification");
+
+
 
 module.exports.register_post = async (req, res) => {
   try {
@@ -27,6 +30,7 @@ module.exports.register_post = async (req, res) => {
       email,
       password: hashedPassword,
       countryOfResidence,
+      verified  
     });
     res.status(201).json({
       status: "success",
@@ -34,10 +38,11 @@ module.exports.register_post = async (req, res) => {
       data: user,
     });
   } catch (err) {
-    const errors = handleErrors(err)
-    res.status(400).json({errors})
+    const errors = handleErrors(err);
+    res.status(400).json({ errors });
   }
-};
+}; 
+
 
 module.exports.login = async (req, res) => {
   try {
@@ -50,7 +55,7 @@ module.exports.login = async (req, res) => {
       });
     }
     //if user found compare password
-    const validPassword =  await bcrypt.compare(
+    const validPassword = await bcrypt.compare(
       req.body.password,
       user.password
     );
@@ -62,6 +67,21 @@ module.exports.login = async (req, res) => {
         message: "invalid password",
       });
     }
+
+    // Verify 2FA code if user has a 2FA secret
+    if (user.twoFactorSecret) {
+      const is2FAValid = verify2FA(
+        user.twoFactorSecret,
+        req.body.twoFactorCode
+      );
+      if (!is2FAValid) {
+        return res.status(400).json({
+          status: "fail",
+          message: "invalid 2FA code",
+        });
+      }
+    }
+
     //if password is valid create token
     const token = jwt.sign({ _id: user._id }, process.env.MY_SECRET, {
       expiresIn: "7days",
@@ -79,8 +99,8 @@ module.exports.login = async (req, res) => {
       data: verified,
     });
   } catch (err) {
-    const errors = handleErrors(err)
-    res.status(400).json({errors})
+    const errors = handleErrors(err);
+    res.status(400).json({ errors });
   }
 };
 
