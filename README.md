@@ -23,7 +23,7 @@ The base URL for all endpoints is: `https://localhost:3000`
 
 **Response:**
 
-- Status: 201 Created
+- Status: 201 user created successfully
 - Body:
  
   ```json
@@ -52,15 +52,12 @@ The base URL for all endpoints is: `https://localhost:3000`
 
 **Response:**
 
-- Status: 201 Created
+- Status: 201 user logged in successfully
 - Body:
  
   ```json
   {
     "_id": "user-id",
-    "fullName": "John Doe",
-    "email": "john@example.com",
-    "countryOfResidence": "USA",
     
   }
   ```

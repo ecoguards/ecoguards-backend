@@ -27,13 +27,15 @@ const userSchema = new mongoose.Schema(
     },
 
     
-  },
-  
-  { 
-    verifed: Boolean 
+    twoFactorSecret:{ 
+     type:String   
 
   },
-
+  twoFactorCodeExpires:{
+    type:Date
+  },
+  },
+ 
   {
     timestamps: true,
   }
